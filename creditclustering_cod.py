@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn import metrics
-from creditclustering_functions import processamento, normalizacao, calculate_inertia, optimal_number_of_clusters, clustering
+from creditclustering_functions import processamento, normalizacao, pca 
+from creditclustering_functions import calculate_inertia, optimal_number_of_clusters, clustering
 
 
 
@@ -14,7 +15,8 @@ sum_of_squares = calculate_inertia(values)
 number_optimal = optimal_number_of_clusters(sum_of_squares)
 print('Número ótimo de clusters:',number_optimal)
  
-kmeans, cluster = clustering(number_optimal, values, dados)
+kmeans, cluster, dados = clustering(number_optimal, values, dados)
+print(dados)
 
 
 #Métrica do Silhoutette
@@ -48,5 +50,8 @@ print(description)
 
 
 print(dados.groupby('Cluster')['PRC_FULL_PAYMENT'].describe())
+
+score = pca(dados)
+print(score)
 
 

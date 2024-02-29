@@ -5,7 +5,7 @@ from creditclustering_functions import calculate_inertia, optimal_number_of_clus
 
 
 
-dados = processamento('creditcustomersegmentation.csv')
+dados, dadospca = processamento('creditcustomersegmentation.csv')
 
 values = normalizacao(dados)
 
@@ -15,7 +15,7 @@ sum_of_squares = calculate_inertia(values)
 number_optimal = optimal_number_of_clusters(sum_of_squares)
 print('Número ótimo de clusters:',number_optimal)
  
-kmeans, cluster, dados = clustering(number_optimal, values, dados)
+kmeans, cluster, dados, dadospca = clustering(number_optimal, values, dados, dadospca)
 print(dados)
 
 
@@ -51,7 +51,7 @@ print(description)
 
 print(dados.groupby('Cluster')['PRC_FULL_PAYMENT'].describe())
 
-score = pca(dados)
+score = pca(dadospca)
 print(score)
 
 

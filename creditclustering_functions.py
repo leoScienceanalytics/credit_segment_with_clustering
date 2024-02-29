@@ -14,8 +14,9 @@ def processamento(file):
     missing = dados.isna().sum()
     print(missing)
     dados.fillna(dados.median(), inplace=True)
+    dadospca = dados.copy()
     
-    return dados
+    return dados, dadospca
 
 
 #Qual modelo de normalização usar? 
@@ -26,7 +27,6 @@ def processamento(file):
 
 def normalizacao(dados):
     values = Normalizer().fit_transform(dados)
-    
     return values
 
 
@@ -68,13 +68,14 @@ def optimal_number_of_clusters(inertia_values):
     return distances.index(max(distances)) + 2
 
 
-def clustering(number_optimal, values, dados):
+def clustering(number_optimal, values, dados, dadospca):
     kmeans = KMeans(n_clusters=number_optimal, n_init=10, max_iter=300) # Definindo o número de clusters, irá variar de 0 até 4.
     y_pred = kmeans.fit_predict(values) #Previsão da segmentação de mercado
     y_pred = pd.DataFrame(y_pred)
     dados['Cluster'] = y_pred
+    dadospca['Cluster'] = y_pred
 
-    return kmeans, dados['Cluster'], dados
+    return kmeans, dados['Cluster'], dados, dadospca
 
 def pca(dados):
     colunas = ['BALANCE', 'PURCHASES', 'CASH_ADVANCE', 'CREDIT_LIMIT', 'PAYMENTS']
@@ -165,14 +166,14 @@ def pca(dados):
     #Reduzindo a dimensionalidade para 4 variáveis
     #Método Aula professora USP
 
-    pca = PCA(n_components=4)
+    pca = PCA(n_components=3)
     pca.fit(df_dados_number)
     components_principais = pca.components_
     print(components_principais)
 
 
     components_scores = []
-    for i in range(4):
+    for i in range(3):
         scores = pca.transform(df_dados_number)[:,i]
         components_scores.append(scores)
 
@@ -182,7 +183,7 @@ def pca(dados):
     dados['scoresCP1'] = components_scores[0]
     dados['scoresCP2'] = components_scores[1]
     dados['scoresCP3'] = components_scores[2]
-    dados['scoresCP4'] = components_scores[3]
+    
     #Scores --> indicam os valores de relação de uma variável com a componente principal em questão
 
 
@@ -190,6 +191,6 @@ def pca(dados):
     print(dados)
 
     filtro_scorecp1 = dados.sort_values(by='scoresCP1', ascending=False)
-    filtro_scorecp1 = filtro_scorecp1.drop(['scoresCP3', 'scoresCP4'], axis=1)
-    colunas = ['BALANCE', 'CREDIT_LIMIT', 'PAYMENTS', 'scoresCP1', 'scoresCP2', 'Ranking']
+    filtro_scorecp1 = filtro_scorecp1.drop(['scoresCP3'], axis=1)
+    colunas = ['BALANCE', 'CREDIT_LIMIT', 'PAYMENTS', 'scoresCP1', 'scoresCP2', 'Ranking', 'Cluster']
     return print(filtro_scorecp1[colunas])

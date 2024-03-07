@@ -154,8 +154,13 @@ def pca(dados):
     print('Cargas Fatoriais:')
     print(cargas_fatoriais)
 
+    lista = ['BALANCE', 'PURCHASES', 'CASH_ADVANCE', 'CREDIT_LIMIT', 'PAYMENTS']
+    
     fig = plt.figure(figsize=(10,5))
-    plt.scatter(x=cargas_fatoriais['F1'], y=cargas_fatoriais['F2'])
+    plt.scatter(x=cargas_fatoriais['F1'], y=cargas_fatoriais['F2'], )
+    for i in range(len(cargas_fatoriais['F1'])):
+        plt.annotate(lista[i], (cargas_fatoriais['F1'][i], cargas_fatoriais['F2'][i]))
+    plt.title('Relação entre cargas fatoriais')
     plt.xlabel('F1')
     plt.ylabel('F2')
     plt.show()
@@ -187,10 +192,10 @@ def pca(dados):
     #Scores --> indicam os valores de relação de uma variável com a componente principal em questão
 
 
-    dados['Ranking'] = dados['scoresCP1'] * explaned_variance_ratio[0] + dados['scoresCP2'] * explaned_variance_ratio[1]
+    dados['Ranking'] = dados['scoresCP1'] * explaned_variance_ratio[0]
     print(dados)
 
-    filtro_scorecp1 = dados.sort_values(by='scoresCP1', ascending=False)
-    filtro_scorecp1 = filtro_scorecp1.drop(['scoresCP3'], axis=1)
-    colunas = ['BALANCE', 'CREDIT_LIMIT', 'PAYMENTS', 'scoresCP1', 'scoresCP2', 'Ranking', 'Cluster']
-    return print(filtro_scorecp1[colunas])
+    filtro_scorecp1 = dados.sort_values(by='Ranking', ascending=False)
+    filtro_scorecp1 = filtro_scorecp1.drop(['scoresCP2','scoresCP3'], axis=1)
+    colunas = ['BALANCE', 'CREDIT_LIMIT', 'PAYMENTS', 'scoresCP1', 'Ranking', 'Cluster']
+    return dados, print(filtro_scorecp1[colunas])

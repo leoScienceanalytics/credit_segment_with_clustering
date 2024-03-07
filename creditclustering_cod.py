@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn import metrics
 from creditclustering_functions import processamento, normalizacao, pca 
 from creditclustering_functions import calculate_inertia, optimal_number_of_clusters, clustering
-
+import matplotlib.pyplot as plt
 
 
 dados, dadospca = processamento('creditcustomersegmentation.csv')
@@ -51,7 +51,14 @@ print(description)
 
 print(dados.groupby('Cluster')['PRC_FULL_PAYMENT'].describe())
 
-score = pca(dadospca)
+dados, score = pca(dadospca)
+print('Rankeamento dos Clusters')
 print(score)
 
 
+cluster_counts = dados['Cluster'].value_counts()
+plt.bar(cluster_counts.index, cluster_counts)
+plt.title('Quantidade por Cluster')
+plt.xlabel('Cluster')
+plt.ylabel('Quantidade')
+plt.show()

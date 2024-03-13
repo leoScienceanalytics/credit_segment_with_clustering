@@ -198,4 +198,4 @@ def pca(dados):
     filtro_scorecp1 = dados.sort_values(by='Ranking', ascending=False)
     filtro_scorecp1 = filtro_scorecp1.drop(['scoresCP2','scoresCP3'], axis=1)
     colunas = ['BALANCE', 'CREDIT_LIMIT', 'PAYMENTS', 'scoresCP1', 'Ranking', 'Cluster']
-    return dados, print(filtro_scorecp1[colunas])
+    return dados, filtro_scorecp1[colunas]

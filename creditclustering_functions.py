@@ -44,7 +44,7 @@ def calculate_inertia(X):
     print('Métrica de Precisão ------ Inertia: ',inertia_values)
 
 # Plotar um gráfico do valor de Inertia em função do número de clusters (K)
-    plt.plot(range(1, 11), inertia_values, marker='o')
+    plt.plot(range(1, 11), inertia_values)
     plt.title('Gráfico de Inertia em função do número de clusters (K)')
     plt.xlabel('Número de Clusters (K)')
     plt.ylabel('Inertia (WCSS)')
